@@ -95,7 +95,7 @@ test('the overall grade always matches the rubric math', async () => {
 });
 
 test('em dashes from the model are removed', async () => {
-  const g = validGradeJson({ main_mistake: 'You chased — entry was late' });
+  const g = validGradeJson({ main_mistake: 'You chased \u2014 entry was late' });
   const r = await ai.gradeTrade({ cfg: getConfig(LIVE), trade, math, client: fakeClient([g]) });
   assert.equal(r.grade.main_mistake, 'You chased, entry was late');
 });

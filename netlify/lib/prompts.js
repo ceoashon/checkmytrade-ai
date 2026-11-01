@@ -111,7 +111,7 @@ function qaSystem({ cacheTtl = '5m' } = {}) {
 
 // Belt and braces for the "never use em dashes" rule.
 function scrubDashes(value) {
-  if (typeof value === 'string') return value.replace(/\s*—\s*/g, ', ').replace(/–/g, '-');
+  if (typeof value === 'string') return value.replace(/\s*\u2014\s*/g, ', ').replace(/\u2013/g, '-');
   if (Array.isArray(value)) return value.map(scrubDashes);
   if (value && typeof value === 'object') {
     const out = {};

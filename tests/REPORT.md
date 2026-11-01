@@ -1,6 +1,6 @@
 # CheckMyTrade Test Report
 
-Generated 2026-11-01T21:03:29.311Z by `npm run eval`.
+Generated 2026-11-01T21:05:40.912Z by `npm run eval`.
 
 - AI mode: **MOCK** (no ANTHROPIC_API_KEY, so grades and answers come from the deterministic mock)
 - Runs per case: 3

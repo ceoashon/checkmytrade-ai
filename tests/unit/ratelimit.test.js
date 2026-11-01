@@ -19,7 +19,7 @@ test('default limit is 5 grades per day, then a friendly 429', async () => {
   const r = parse(await h(ev('POST', { token, body: validTrade() })));
   assert.equal(r.status, 429);
   assert.equal(r.body.code, 'DAILY_LIMIT');
-  assert.ok(!/—/.test(r.body.error), 'no em dashes in user copy');
+  assert.ok(!/\u2014/.test(r.body.error), 'no em dashes in user copy');
 });
 
 test('default limit is 20 questions per day', async () => {
