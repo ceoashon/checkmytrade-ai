@@ -1,0 +1,8 @@
+node_modules/
+.env
+.env.*
+!.env.example
+.netlify/
+netlify/functions/_lib/knowledge.generated.js
+tests/.eval-output/
+.DS_Store
