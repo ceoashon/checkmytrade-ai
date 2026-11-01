@@ -93,7 +93,12 @@ function mockQa(question) {
       sources: [],
     };
   }
-  const body = hit.body.replace(/^\*\*[^*]+\*\*\n?/, '').replace(/^#{2,3} .+\n?/, '').trim();
+  const body = hit.body
+    .replace(/^\*\*[^*]+\*\*\n?/, '')
+    .replace(/^#{2,3} .+\n?/, '')
+    .replace(/^_.*_$/gm, '') // drop italic reviewer notes
+    .replace(/[*_`]/g, '')
+    .trim();
   const provisional = /provisional|NEEDS COACH REVIEW/i.test(hit.body) || hit.path.endsWith('glossary.md');
   return {
     answer: `${hit.title}: ${body.split('\n').filter(Boolean).slice(0, 4).join(' ')}${provisional ? ' Note: this definition is still being reviewed by the coach.' : ''} (Mock mode)`,

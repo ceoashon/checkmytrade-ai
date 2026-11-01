@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CheckMyTrade AI</title>
+  <meta name="description" content="Graded feedback on your TheStrat trades, in your coach's voice. A Solomon's Circle tool.">
+  <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
+  <script type="module" src="/js/app.js"></script>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="/" aria-label="CheckMyTrade home">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span class="brand-name">CheckMyTrade <b>AI</b></span>
+      </a>
+      <nav class="tabs hidden" id="tabs" aria-label="Main">
+        <button data-view="grade" class="active">Grade a Trade</button>
+        <button data-view="ask">Ask the Course</button>
+        <button data-view="history">My Grades</button>
+        <button data-view="coach" class="hidden" id="tab-coach">Coach</button>
+      </nav>
+      <div class="user-box hidden" id="user-box">
+        <span class="pill gold" id="usage-pill"></span>
+        <button class="btn ghost small" id="sign-out">Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="mode-banner" class="alert info hidden"></div>
+
+    <!-- Loading -->
+    <section id="view-loading" class="center-box" aria-live="polite">
+      <div class="panel" style="display:flex;gap:12px;align-items:center;justify-content:center">
+        <div class="spinner light"></div><span>Getting things ready for you...</span>
+      </div>
+    </section>
+
+    <!-- Sign in -->
+    <section id="view-signin" class="center-box hidden">
+      <div class="panel">
+        <h1>Welcome back</h1>
+        <p class="muted">Sign in with the same login you use for your trading journal.</p>
+        <div id="signin-supabase">
+          <button class="btn ghost block" id="google-btn" type="button">Continue with Google</button>
+          <div class="or">or use your email</div>
+          <form id="email-form">
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" type="email" autocomplete="email" required placeholder="you@example.com">
+            </div>
+            <button class="btn primary block" type="submit">Email me a sign in link</button>
+          </form>
+        </div>
+        <div id="signin-dev" class="hidden">
+          <p class="small muted">Local dev mode: no Supabase connected. Pick a test account, then use invite code <b>DEMO-STUDENT</b> or <b>DEMO-COACH</b>.</p>
+          <form id="dev-form">
+            <div class="field">
+              <label for="dev-email">Test email</label>
+              <input id="dev-email" type="email" value="student@example.com" required>
+            </div>
+            <button class="btn primary block" type="submit">Sign in for testing</button>
+          </form>
+        </div>
+        <div id="signin-msg"></div>
+      </div>
+    </section>
+
+    <!-- Invite -->
+    <section id="view-invite" class="center-box hidden">
+      <div class="panel">
+        <h1>You are almost in</h1>
+        <p class="muted">CheckMyTrade is invite only. Enter the code your coach gave you to unlock it.</p>
+        <form id="invite-form">
+          <div class="field">
+            <label for="invite-code">Invite code</label>
+            <input id="invite-code" autocomplete="off" required placeholder="SC-XXXX-XXXX" style="text-transform:uppercase">
+          </div>
+          <button class="btn primary block" type="submit">Unlock CheckMyTrade</button>
+        </form>
+        <div id="invite-msg"></div>
+      </div>
+    </section>
+
+    <!-- Grade -->
+    <section id="view-grade" class="hidden">
+      <div class="hero">
+        <h1>Grade a Trade</h1>
+        <p>Upload your chart and the details of your trade. You will get a graded breakdown on every part of the process, plus the one thing to work on next.</p>
+      </div>
+      <form id="grade-form" class="panel" novalidate>
+        <div class="grid two">
+          <div>
+            <div class="field">
+              <label>Chart screenshot</label>
+              <div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload chart screenshot">
+                <img id="preview" alt="" class="hidden">
+                <div id="drop-text"><strong>Drop your screenshot here</strong><br><span class="muted small">or click to choose a file, or paste with Ctrl V</span></div>
+              </div>
+              <input type="file" id="file" accept="image/png,image/jpeg,image/webp" class="hidden">
+            </div>
+            <div class="field">
+              <label for="notes">Your notes</label>
+              <textarea id="notes" maxlength="2000" placeholder="What was the setup? What was continuity doing? Did you follow your plan? Anything you would do differently?"></textarea>
+            </div>
+          </div>
+          <div>
+            <div class="grid two">
+              <div class="field"><label for="instrument">Instrument</label><input id="instrument" required placeholder="MNQ" maxlength="40"></div>
+              <div class="field"><label for="timeframe">Timeframe</label>
+                <select id="timeframe" required>
+                  <option value="">Choose</option>
+                  <option>1m</option><option>3m</option><option selected>5m</option><option>15m</option><option>30m</option><option>1h</option><option>4h</option><option>1D</option><option>1W</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label>Direction</label>
+              <div class="seg">
+                <label><input type="radio" name="direction" value="long" checked><span>Long</span></label>
+                <label><input type="radio" name="direction" value="short"><span>Short</span></label>
+              </div>
+            </div>
+            <div class="grid three">
+              <div class="field"><label for="entry">Entry</label><input id="entry" inputmode="decimal" required></div>
+              <div class="field"><label for="stop">Stop</label><input id="stop" inputmode="decimal" required></div>
+              <div class="field"><label for="target">Target</label><input id="target" inputmode="decimal" required></div>
+            </div>
+            <div class="field"><label for="result">Result</label>
+              <select id="result" required>
+                <option value="win">Win</option><option value="loss">Loss</option><option value="breakeven">Breakeven</option>
+                <option value="open">Still open</option><option value="not_taken">Planned, not taken</option>
+              </select>
+            </div>
+            <div class="grid two">
+              <div class="field"><label for="contracts">Contracts <span class="muted small">(optional)</span></label><input id="contracts" inputmode="numeric"></div>
+              <div class="field"><label for="account">Account size <span class="muted small">(optional)</span></label><input id="account" inputmode="decimal" placeholder="25000"></div>
+            </div>
+            <p class="small muted">Adding contracts and account size lets the grader check your risk sizing.</p>
+            <button class="btn primary block" type="submit" id="grade-btn">Grade my trade</button>
+          </div>
+        </div>
+        <div id="grade-msg"></div>
+      </form>
+      <div id="grade-result"></div>
+    </section>
+
+    <!-- Ask -->
+    <section id="view-ask" class="hidden">
+      <div class="hero">
+        <h1>Ask the Course</h1>
+        <p>Questions about TheStrat, the Strat Trader indicator, or how grading works. Answers come only from the course materials. If something is not covered, it will say so instead of guessing.</p>
+      </div>
+      <div class="panel">
+        <div class="chat" id="chat" aria-live="polite"></div>
+        <form class="chat-form" id="ask-form">
+          <input id="question" maxlength="1000" placeholder="For example: What is a 2-1-2 reversal?" autocomplete="off" required>
+          <button class="btn primary" type="submit" id="ask-btn">Ask</button>
+        </form>
+        <div id="ask-msg"></div>
+      </div>
+    </section>
+
+    <!-- History -->
+    <section id="view-history" class="hidden">
+      <div class="hero"><h1>My Grades</h1><p>Every trade you have submitted, newest first. Coach notes show up here too.</p></div>
+      <div id="history-list"></div>
+    </section>
+
+    <!-- Coach -->
+    <section id="view-coach" class="hidden">
+      <div class="hero"><h1>Coach View</h1><p>Review every submission, override grades, and teach the grader with calibration examples.</p></div>
+      <div class="panel">
+        <nav class="tabs" style="margin:0 0 16px">
+          <button data-coach="submissions" class="active">Submissions</button>
+          <button data-coach="costs">Cost per Student</button>
+          <button data-coach="invites">Invite Codes</button>
+        </nav>
+        <div id="coach-body"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap"><strong>Education only, not financial advice.</strong> CheckMyTrade AI is a study tool for Solomon's Circle students.</div>
+  </footer>
+</body>
+</html>
