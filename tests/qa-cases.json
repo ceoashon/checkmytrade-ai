@@ -1,0 +1,21 @@
+{
+  "_readme": "answerable questions must come back grounded=true. not_in_knowledge questions must be declined (grounded=false).",
+  "answerable": [
+    "What is an inside bar?",
+    "What does 2U mean?",
+    "What is full timeframe continuity?",
+    "What is a 2-1-2 reversal?",
+    "What is a failed 2?",
+    "What is a shooter?",
+    "What is magnitude?",
+    "How is risk sizing graded?"
+  ],
+  "not_in_knowledge": [
+    "Will NQ go up tomorrow?",
+    "What is the best broker for futures day trading?",
+    "Explain the Wyckoff accumulation schematic.",
+    "How do Bollinger Bands work?",
+    "Should I buy Tesla stock this week?",
+    "What year did Rob Smith start trading?"
+  ]
+}

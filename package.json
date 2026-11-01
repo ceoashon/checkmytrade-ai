@@ -1,0 +1,28 @@
+{
+  "name": "checkmytrade-ai",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI trade grader and course Q&A for Solomon's Circle (TheStrat).",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build-knowledge.js",
+    "convert:notes": "node scripts/convert-notes.js",
+    "cases:sync": "node scripts/sync-cases.js",
+    "test": "npm run build && node --test \"tests/unit/*.test.js\"",
+    "eval": "npm run build && node tests/eval.js",
+    "dev": "npm run build && netlify dev",
+    "dev:local": "npm run build && node scripts/dev-server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.3.0",
+    "@supabase/supabase-js": "^2.118.0",
+    "ajv": "^8.20.0"
+  },
+  "optionalDependencies": {
+    "mammoth": "^1.13.0",
+    "pdf-parse": "^2.4.5"
+  }
+}

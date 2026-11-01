@@ -3,6 +3,6 @@ node_modules/
 .env.*
 !.env.example
 .netlify/
-netlify/functions/_lib/knowledge.generated.js
+netlify/lib/knowledge.generated.js
 tests/.eval-output/
 .DS_Store

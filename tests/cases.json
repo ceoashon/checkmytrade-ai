@@ -1,0 +1,30 @@
+{
+  "_readme": "One case per screenshot in knowledge/examples/. Run `npm run cases:sync` after adding screenshots to create stubs. Fill in trade details and expected_grade_range, then set expected_range_status to COACH CONFIRMED. Cases with source 'fixture' are synthetic pipeline checks, not coaching examples.",
+  "cases": [
+    {
+      "id": "fixture-synthetic-2-1-2",
+      "source": "fixture",
+      "filename": "sample-chart.png",
+      "image_path": "tests/fixtures/sample-chart.png",
+      "details_source": "Synthetic chart drawn by the build script: candles read as down, down, inside bar, then up breaks. Prices are invented.",
+      "trade": {
+        "instrument": "MNQ",
+        "timeframe": "5m",
+        "direction": "long",
+        "entry": 21000,
+        "stop": 20990,
+        "target": 21030,
+        "result": "win",
+        "contracts": 2,
+        "account_size": 10000,
+        "notes": "2-1-2 reversal. Higher timeframes green (FTFC). Entered on the break of the inside bar high, stop under the inside bar low, target the previous candle high. Followed my plan."
+      },
+      "expected_grade_range": {
+        "min": "B",
+        "max": "A+"
+      },
+      "expected_range_status": "NEEDS COACH REVIEW",
+      "why": "Textbook process described in the notes with 3 to 1 reward and 0.4 percent risk. Best guess by the assistant."
+    }
+  ]
+}
